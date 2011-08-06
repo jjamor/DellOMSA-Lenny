@@ -54,6 +54,8 @@ cp -p /etc/{hosts,passwd,resolv.conf,group,shadow,gshadow} /srv/squeeze-$ARCH/et
 cp -p /etc/fstab{,.dist}
 
 cat <<EOF >> /etc/fstab
+
+# for Dell OMSA chroot
 /proc /srv/squeeze-$ARCH/proc none rw,rbind 0 0
 /sys /srv/squeeze-$ARCH/sys none rw,rbind 0 0
 /dev /srv/squeeze-$ARCH/dev none rw,rbind 0 0
