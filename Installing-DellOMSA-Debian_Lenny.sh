@@ -49,9 +49,9 @@ apt-get install debootstrap
 
 debootstrap --arch $ARCH squeeze /srv/squeeze-$ARCH
 
-cp /etc/{hosts,passwd,resolv.conf,group,shadow,gshadow} /srv/squeeze-$ARCH/etc/
+cp -p /etc/{hosts,passwd,resolv.conf,group,shadow,gshadow} /srv/squeeze-$ARCH/etc/
 
-cp /etc/fstab{,.dist}
+cp -p /etc/fstab{,.dist}
 
 cat <<EOF >> /etc/fstab
 /proc /srv/squeeze-$ARCH/proc none rw,rbind 0 0
