@@ -20,6 +20,9 @@ fi
 
 ARCH=$(apt-config dump | sed -nr 's/APT::Architecture \"(\S+)\";/\1/p');
 
+GPG_KEY_ID=E74433E25E3D7775
+GPG_KEY_SERVER=pgpkeys.mit.edu
+
 ####
 #    For more information please refer to : http://linux.dell.com/repo/community/deb/latest/
 #    and to the linux-poweredge mailing list https://lists.us.dell.com/mailman/listinfo/linux-poweredge
@@ -75,6 +78,10 @@ chroot /srv/squeeze-$ARCH apt-get -f install
 chroot /srv/squeeze-$ARCH apt-get upgrade
 
 echo 'deb http://linux.dell.com/repo/community/deb/latest /' > /srv/squeeze-$ARCH/etc/apt/sources.list.d/linux.dell.com.sources.list 
+
+# download and trust GPG key for Dell OMSA packages
+gpg --keyserver $GPG_KEY_SERVER --recv-key $GPG_KEY_ID
+gpg -a --export $GPG_KEY_ID | chroot /srv/squeeze-$ARCH apt-key add -
 
 chroot /srv/squeeze-$ARCH apt-get update
 chroot /srv/squeeze-$ARCH apt-get install $OMSA_PACKAGES
