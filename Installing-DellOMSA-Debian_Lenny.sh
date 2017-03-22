@@ -37,20 +37,22 @@ GPG_KEY_SERVER=pgpkeys.mit.edu
 #    srvadmin-storageservices:Install RAID Management 
 #
 ## Specify here what packages you want to install
-OMSA_PACKAGES="srvadmin-base srvadmin-storageservices srvadmin-rac5";
+OMSA_PACKAGES="srvadmin-base srvadmin-storageservices srvadmin-rac5 srvadmin-webserver";
 
-
+## squeeze is currently archived
+SQUEEZEMIRROR=http://archive.debian.org/debian/
 
 cat <<EOF > /etc/apt/sources.list.d/debian.squeeze.sources.list
 deb http://mirrors.kernel.org/debian/ squeeze main non-free contrib
 deb http://security.debian.org/ squeeze/updates main non-free contrib
+deb http://archive.debian.org/debian-archive/debian squeeze main contrib
 EOF
 
 apt-get update
 
 apt-get install debootstrap
 
-debootstrap --arch $ARCH squeeze /srv/squeeze-$ARCH
+debootstrap --arch $ARCH squeeze /srv/squeeze-$ARCH $SQUEEZEMIRROR
 
 cp -p /etc/{hosts,passwd,resolv.conf,group,shadow,gshadow} /srv/squeeze-$ARCH/etc/
 
@@ -101,6 +103,7 @@ EOF
 chmod 755 /usr/local/bin/squeeze-$ARCH
 ln -s /usr/local/bin/squeeze-$ARCH /etc/init.d/dataeng
 ln -s /usr/local/bin/squeeze-$ARCH /etc/init.d/instsvcdrv
+ln -s /usr/local/bin/squeeze-$ARCH /etc/init.d/dsm_om_connsvc
 
 # Adjust lenny LSB scripts to chrooted Dell OMSA init.d scripts, they have to be in the same path to be launched at boot
 chroot /srv/squeeze-$ARCH/ find /etc/rc?.d/ -name "*dataeng" | xargs -ipath ln -s /etc/init.d/dataeng path
